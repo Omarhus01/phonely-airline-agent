@@ -57,7 +57,17 @@ def notify(req: NotificationRequest):
         except Exception as e:
             return {"sent": "email_failed", "to": req.contact_email, "error": str(e)}
     if req.contact_phone:
-        return {"sent": "sms_pending", "to": req.contact_phone}
+        # SMS delivery requires a paid provider (Twilio, MessageBird, etc.).
+        # Routing logic and payload assembly are wired; a real provider would
+        # drop in here with one call. Stubbed for this assessment.
+        print(
+            f"[SMS STUB] to={req.contact_phone} "
+            f"conf={req.confirmation_number} "
+            f"flight={req.flight_number} "
+            f"{req.departure_city}->{req.arrival_city} "
+            f"date={req.travel_date}"
+        )
+        return {"sent": "sms_stub", "to": req.contact_phone}
     return {"sent": "none", "reason": "no contact info provided"}
 
 
