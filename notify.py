@@ -51,8 +51,11 @@ def send_email(to: str, req: NotificationRequest):
 @app.post("/notify")
 def notify(req: NotificationRequest):
     if req.contact_email:
-        send_email(req.contact_email, req)
-        return {"sent": "email", "to": req.contact_email}
+        try:
+            send_email(req.contact_email, req)
+            return {"sent": "email", "to": req.contact_email}
+        except Exception as e:
+            return {"sent": "email_failed", "to": req.contact_email, "error": str(e)}
     if req.contact_phone:
         return {"sent": "sms_pending", "to": req.contact_phone}
     return {"sent": "none", "reason": "no contact info provided"}
