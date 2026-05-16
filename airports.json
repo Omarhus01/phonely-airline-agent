@@ -1,0 +1,41 @@
+{
+  "united_states": {
+    "los angeles": "LAX",
+    "la": "LAX",
+    "lax": "LAX",
+    "new york": "JFK",
+    "nyc": "JFK",
+    "new york city": "JFK",
+    "san francisco": "SFO",
+    "sf": "SFO",
+    "bay area": "SFO",
+    "chicago": "ORD",
+    "miami": "MIA",
+    "dallas": "DFW",
+    "boston": "BOS",
+    "seattle": "SEA",
+    "atlanta": "ATL",
+    "denver": "DEN",
+    "las vegas": "LAS",
+    "houston": "IAH",
+    "phoenix": "PHX",
+    "orlando": "MCO",
+    "washington dc": "DCA",
+    "dc": "DCA"
+  },
+  "canada": {
+    "vancouver": "YVR",
+    "toronto": "YYZ",
+    "montreal": "YUL",
+    "calgary": "YYC"
+  },
+  "international": {
+    "london": "LHR",
+    "paris": "CDG",
+    "tokyo": "NRT",
+    "dubai": "DXB",
+    "sydney": "SYD",
+    "aalborg": "AAL",
+    "aal": "AAL"
+  }
+}
