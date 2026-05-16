@@ -1,7 +1,6 @@
 import os
-import smtplib
-from email.mime.text import MIMEText
 
+import requests as http
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -15,7 +14,7 @@ class NotificationRequest(BaseModel):
     contact_phone: str = ""
     contact_email: str = ""
     confirmation_number: str
-    flight_number: str
+    flight_number: str = ""
     departure_city: str
     arrival_city: str
     travel_date: str
@@ -33,14 +32,20 @@ def send_email(to: str, req: NotificationRequest):
         f"Date:                {req.travel_date}\n\n"
         f"Thank you for flying with Phonely Air!"
     )
-    msg = MIMEText(body)
-    msg["Subject"] = f"Phonely Air Confirmation — {req.confirmation_number}"
-    msg["From"] = os.environ["GMAIL_USER"]
-    msg["To"] = to
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(os.environ["GMAIL_USER"], os.environ["GMAIL_APP_PASSWORD"])
-        server.send_message(msg)
+    response = http.post(
+        "https://api.resend.com/emails",
+        headers={
+            "Authorization": f"Bearer {os.environ['RESEND_API_KEY']}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "from": "Phonely Air <onboarding@resend.dev>",
+            "to": [to],
+            "subject": f"Phonely Air Confirmation — {req.confirmation_number}",
+            "text": body,
+        },
+    )
+    response.raise_for_status()
 
 
 @app.post("/notify")
@@ -49,8 +54,6 @@ def notify(req: NotificationRequest):
         send_email(req.contact_email, req)
         return {"sent": "email", "to": req.contact_email}
     if req.contact_phone:
-        # SMS via Twilio — not configured in this deployment
-        # Route is detected; extend with Twilio SDK when A2P registration is complete
         return {"sent": "sms_pending", "to": req.contact_phone}
     return {"sent": "none", "reason": "no contact info provided"}
 
