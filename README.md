@@ -321,6 +321,44 @@ Agent:  "Booking your flight now... Your booking is confirmed.
 
 ---
 
+## Example Calls
+
+### Policy Q&A — Refund Policy
+
+The *Answer business questions* node handles policy questions via the knowledge base. The caller
+asked about the refund policy mid-call and the agent answered directly from `airline_policies.txt`
+before continuing to booking.
+
+![Policy Q&A — refund policy answered from knowledge base](examples/policy%20example.png)
+
+---
+
+### No Flights Available — AAL to YVR
+
+The assessment test case. The caller spells out "A-A-L-B-O-R-G" and the *Convert city and date*
+Code node correctly resolves it to `AAL`. The AWS API returns a 404 with `"flights": []`. The
+*Compute has flights* Code node catches the empty array and the *No flights found* node tells the
+caller gracefully and offers a retry.
+
+![Caller spells out Aalborg — policy Q&A handled first, then AAL→YVR booking attempt starts](examples/Invalid%20trip1%20.png)
+
+![IATA resolved correctly from spelled-out name — agent confirms Aalborg, date collected, search runs](examples/Invalid%20trip2%20.png)
+
+![Search flights API returns GET 404 with empty flights array — Compute has flights and Check flights found nodes handle it, agent offers retry](examples/invalid%20trip3.png)
+
+---
+
+### Unknown City — Atlantis
+
+When a caller provides an unrecognized city, the *Convert city and date* Code node returns `""`
+for the IATA code, *Validate inputs* returns `is_valid: false`, and the *Collect missing trip
+detail* node asks for a nearby major city. The agent holds its ground through two attempts before
+the caller gives up and switches to New York.
+
+![Unknown city — agent correctly rejects "Atlantis" twice and asks for a nearby major city](examples/wrong%20places%20.png)
+
+---
+
 ## Limitations
 
 **SMS not active** — Twilio's A2P 10DLC registration (required for US local numbers) takes
