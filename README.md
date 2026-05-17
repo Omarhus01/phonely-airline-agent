@@ -7,7 +7,7 @@
 
 **GitHub:** https://github.com/Omarhus01/phonely-airline-agent
 
-**Demo Video:** *(link added after recording)*
+**Demo Video:** https://www.loom.com/share/2d26970d460d471c879e727659e15e4e
 
 ---
 
